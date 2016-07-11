@@ -1,0 +1,85 @@
+body {
+    font-family: 'Open Sans', 'Helvetica Neue',
+    Helvetica, Arial, sans-serif;
+}
+
+.board-list {
+    border: 1px dotted grey;
+    box-shadow: 0px 0px 53px -10px rgba(174,180,194,1);
+    font-size: 15px;
+}
+.board-list p {
+    margin: 10px 0;
+}
+.board-list .title {
+    font-weight: bold;
+    margin: 10px 0;
+}
+.board-list .btn {
+    padding: 7.5px 10px;
+    font-size: 12.5px;
+}
+.board-list a {
+    cursor: pointer;
+}
+
+#newPostModal #content {
+    height:auto;
+    overflow:hidden;
+    resize: none;
+    margin-botton:10px;
+}
+
+#newPostModal .thumbnail-wrappper {
+    width: 25%;
+}
+
+#newPostModal .thumbnail {
+    border : 1px solid #F15F5F;
+    border-radius: 0px;
+    position: relative;
+    padding-top: 100%;  /* 1:1 ratio */
+    overflow: hidden;
+}
+
+#newPostModal .thumbnail .centered  {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transform: translate(50%,50%);
+}
+
+#newPostModal .thumbnail .centered img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-width: 100%;
+    height: auto;
+    transform: translate(-50%,-50%);
+}
+
+#newPostModal .thumbnail-hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: black;
+    width: 100%;
+    height: 100%;
+    opacity:0;
+}
+
+#newPostModal #deleteBoardFile {
+    cursor: pointer;
+}
+
+#newPostModal .file-drag {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 5px dashed #FF0000;
+    opacity:0;
+}

@@ -1,0 +1,17 @@
+.custom-button{
+    padding: 10px 20px;
+    color: #fff;
+    background-color: #6799FF;
+    text-align: center;
+    font-family: 'Open Sans', 'Helvetica Neue',
+    Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    border:3px solid #6799FF;
+    border-radius:1px;
+    opacity:.9;
+}
+.custom-button:hover {
+    color: #fff;
+    background-color: #4374D9;
+    border: 3px solid #4374D9;
+}
