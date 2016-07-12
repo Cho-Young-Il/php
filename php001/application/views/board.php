@@ -55,6 +55,7 @@
 									<span class="fa fa-caret-up"></span>
 								</a>
 								<ul class="dropdown-menu" role="menu">
+									<li><a class="text-center row-per-page">10 rows</a></li>
 									<li><a class="text-center row-per-page">20 rows</a></li>
 									<li><a class="text-center row-per-page">40 rows</a></li>
 									<li><a class="text-center row-per-page">60 rows</a></li>
@@ -62,7 +63,7 @@
 									<li><a class="text-center row-per-page">100 rows</a></li>
 								</ul>
 							</div>
-							<span id="rowsPerPage" style="margin-left: 10px; color: #337ab7; font-size:22px; font-weight: bold;">20 rows</span>
+							<span id="rowsPerPage" style="margin-left: 10px; color: #337ab7; font-size:22px; font-weight: bold;">10 rows</span>
 							<ul class="pagination pagination-sm pull-right" style="margin: 0 0; font-weight: bold;"></ul>
 						</div>
 					</div><br><br><br>
@@ -137,10 +138,6 @@
 						</div>
 					</div>
 
-					<input type="hidden" id="group" style="display :none;" value="-1">
-					<input type="hidden" id="groupSeq" style="display :none;" value="1">
-					<input type="hidden" id="depth" style="display :none;" value="0">
-					<input type="hidden" id="isReply" style="display :none;" value="false">
 					<input id="attachFiles" type="file" multiple="multiple" style="display: none;">
 					<button id="searchImage" class="btn btn-block btn-danger">
 						<i class="fa fa-fw fa-file-picture-o"></i>SEARCH IMAGE

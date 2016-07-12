@@ -1,0 +1,36 @@
+{
+  "name": "php01",
+  "homepage": "https://github.com/Cho-Young-Il/php/tree/master/php001",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "2.0.3",
+    "jquery-ui": "1.10.4",
+    "bootstrap": "~3.3.4",
+    "font-awesome": "~4.3.0",
+    "clean-blog": "1.0.0",
+    "autogrow-textarea": "*",
+    "jquery-smooth-scroll": "*",
+    "xss": "^0.2.13"
+  },
+  "install": {
+    "path": "public/lib",
+    "sources": {
+      "jquery": "bower_components/jquery/**",
+      "jquery-ui": "bower_components/jquery-ui/**",
+      "bootstrap": "bower_components/bootstrap/dist/**",
+      "font-awesome": "bower_components/font-awesome/**",
+      "clean-blog": "bower_components/clean-blog/**",
+      "autogrow-textarea": "bower_components/autogrow-textarea/**",
+      "jquery-smooth-scroll": "bower_components/jquery-smooth-scroll/**",
+      "xss": "bower_components/xss/dist/**"
+    }
+  }
+}
