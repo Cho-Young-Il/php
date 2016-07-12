@@ -202,7 +202,7 @@ $("#newPostModal #boardAddForm").submit(function() {
     if(uploadFile(formData, board.contextRoot + "regist")) {
         alert("Success regist new post");
         $("#newPostModal button.close").trigger("click");
-        //ajax로 list 목록 불러와야함!!!
+        getList();
     }
     return false;
 });
@@ -224,6 +224,112 @@ function uploadFile(formData, url) {
         }
     });
     return isNotERR;
+}
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////
+/////////////////////////////////list/////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+function getList() {
+    $.getJSON(board.contextRoot + "getList?" + $.param(board.pageable), function(data) {
+        console.log(data);
+        var boardHTML = "";
+        var boardList = data.board_list;
+        for(var i in boardList) {
+            var b = boardList[i];
+
+            boardHTML += '<li class="list-group-item">';
+            boardHTML += '	<div class="media">';
+            for(var i = 0; i < b.depth; i++) {
+                boardHTML += '		<i class="pull-left">&nbsp;&nbsp;</i>';
+            }
+            boardHTML += '		<i class="fa fa-file-o pull-left"></i>';
+            boardHTML += '		<span class="number pull-right"># ' + b.b_no + '</span>';
+            boardHTML += '		<div class="media-body">';
+            if(b.depth != 0) {
+                boardHTML += '			<div class="label label-primary">ㄴREPLY</div>';
+            }
+            boardHTML += '			<div class="title"><a class="board-detail-link" boardNo=' + b.b_no + ' data-toggle="modal" data-target="#detailPostModal">' + b.title + '</a></div>';
+            boardHTML += '			<p class="info">' + b.writer;
+            boardHTML += '				<strong> /</strong>';
+            boardHTML += '				<i class="fa fa-fw fa-clock-o"></i>' + b.reg_date;
+            boardHTML += '				<strong> /</strong>';
+            boardHTML += '				<i class="fa fa-comments"></i> ' + b.comment_cnt + ' comments';
+            boardHTML += '			</p>';
+            boardHTML += '		</div>';
+            boardHTML += '	</div>';
+            boardHTML += '</li>';
+        }
+        $("#boardList").html(boardHTML);
+        $("a.board-detail-link").click(clickBoardDetailLink);
+
+        var paginationHTML = "";
+        if(data.page_no != 1) {
+            paginationHTML += '<li><a class="page-link" pageNo=1>&lt&lt</a></li>';
+        }
+        if(data.begin_page != 1){
+            paginationHTML += '<li><a class="page-link" pageNo=' + (data.begin_page - 1) + '>&lt</li>'
+        }
+        for(var i = data.begin_page; i <= data.end_page; i++) {
+            paginationHTML += '<li';
+            if(i == data.page_no) {
+                paginationHTML += ' class="active"'
+            }
+            paginationHTML += '><a class="page-link" pageNo=' + i + '>' + i + '</a></li>';
+        }
+        if(data.end_page != data.last_page) {
+            paginationHTML += '<li><a class="page-link" pageNo=' + (data.end_page + 1) + '>&gt</a></li>';
+        }
+        if(data.page_no != data.last_page) {
+            paginationHTML += '<li><a class="page-link" pageNo=' + data.last_page + '>&gt&gt</a></li>'
+        }
+        $(".board-list .pagination").html(paginationHTML);
+        $("a.page-link").click(changePage);
+
+        $(".board-list #searchType").html("FILTER BY");
+        board.pageable.searchType = undefined;
+        board.pageable.searchKeyword = undefined;
+        board.pageable.pageNo = data.page_no;
+        board.pageable.size = data.size;
+
+    }).fail(function(e) {
+        console.log(e);
+    });
+}
+getList();
+
+$(".board-list a.search-type").click(function(event) {
+    event.preventDefault();
+    var searchType = $(event.target).html();
+    $(".board-list #searchType").html(searchType);
+    board.pageable.searchType = searchType.toLowerCase();
+});
+
+$(".board-list #searchBtn").click(function() {
+    board.pageable.searchKeyword = filterXSS($(".board-list input[name=keyword]").val());
+    getList();
+    $(".board-list input[name=keyword]").val("");
+});
+
+$(".board-list a.row-per-page").click(function(event) {
+    event.preventDefault();
+
+    var rows = parseInt($(this).html().split(" ")[0]);
+    board.pageable.size = rows;
+    $(".board-list #rowsPerPage").html(rows + " rows")
+    getList();
+});
+
+function changePage(event) {
+    event.preventDefault();
+    board.pageable.pageNo = $(event.target).attr("pageNo");
+    getList();
 }
 
 //////////////////////////////////////////////////////////////////////

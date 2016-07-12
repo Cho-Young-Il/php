@@ -9,6 +9,7 @@ class Board extends CI_Controller {
 		$this->load->database();
 		$this->load->model('board_model');
 		$this->load->model('attachfile_model');
+		$this->load->model('comment_model');
 	}
 
 	public function index() {
@@ -17,6 +18,7 @@ class Board extends CI_Controller {
 
 	public function regist() {
 		//board, file regist
+		//insert transaction
 		$this->db->trans_begin();
 
 		$b_no = $this->boardRegist();	//board regist
@@ -37,7 +39,44 @@ class Board extends CI_Controller {
 		$this->db->trans_commit();
 	}
 
+	public function getList() {
+		//get board list, paging, search condition
+
+		$howmany_per_page = $_GET['size'];
+		$PAGE_UNIT = 5;
+
+		$page_no = $_GET['pageNo'];
+		$start = ($page_no - 1) * $howmany_per_page + 1;
+
+		$ret = $this->board_model->getList(array(
+			'start'=>$start,
+			'howmany_per_page'=>$howmany_per_page,
+			'search_type'=>$_GET['searchType'],
+			'search_keyword'=>$_GET['searchKeyword'],
+		));
+
+		$board_cnt_all = $ret['board_cnt_all'];
+		$last_page = ($board_cnt_all % $howmany_per_page == 0) ?
+					intval($board_cnt_all / $howmany_per_page) :
+					intval($board_cnt_all / $howmany_per_page) + 1;
+		log_message("info", gettype($last_page));
+		$current_tab = intval(($page_no - 1) / $PAGE_UNIT) + 1;
+		$begin_page = ($current_tab - 1) * $PAGE_UNIT + 1;
+		$end_page = ($current_tab * $PAGE_UNIT > $last_page) ?
+					$last_page : $current_tab * $PAGE_UNIT;
+
+		$json['board_list'] = $ret['board_list'];
+		$json['page_no'] = $page_no;
+		$json['last_page'] = $last_page;
+		$json['begin_page'] = $begin_page;
+		$json['end_page'] = $end_page;
+		$json['size'] = $howmany_per_page;
+
+		echo json_encode($json);
+	}
+
 	private function boardRegist() {
+		//board register
 		$b_no = $this->board_model->regist(array(
 			'grp'=>$_POST['grp'],
 			'grp_seq'=>$_POST['grpSeq'],
@@ -56,6 +95,8 @@ class Board extends CI_Controller {
 	}
 
 	private function fileRegist($b_no) {
+		//file register
+
 		if(is_array($_FILES['files']['name'])) {
 			$pattern = "/.(jpeg|jpg|gif|png)$/i";
 			$filesize = 0;
