@@ -277,7 +277,7 @@
 						<h5 style="text-align: center" class="text-primary">NEW COMMENT</h5>
 						<form class="form-horizontal" id="commentAddForm" role="form">
 							<div class="input-group">
-								<input type="text" class="form-control" name="content" placeholder="Comment">
+								<input type="text" class="form-control" name="content" placeholder="COMMENT">
 								<span class="input-group-btn">
 									<button class="btn btn-primary" id="commentAddBtn" type="submit"
 											style="padding: 7.5px 10px; font-size: 12.5px;">
@@ -312,6 +312,7 @@
 								</div>
 							</div>
 						</form><hr>
+
 						<div id="commentList"></div>
 					</div><br>
 				</div><hr>
@@ -345,6 +346,35 @@
 	</div>
 </div>
 
+<!-- COMMENT DELETE CONFIRM -->
+<div class="modal fade" id="commentDeleteConfirm">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">×</button>
+				<h4 class="modal-title text-danger">Delete Comment</h4>
+			</div>
+			<form id="deleteCommentForm" role="form">
+				<input type="hidden" id="deleteCommentNo">
+				<div class="modal-body">
+					<div class="input-group">
+						<span class="input-group-addon">
+							<i class="glyphicon glyphicon-lock mycolor"></i>
+						</span>
+						<input size="20" maxlength="20" class="form-control"
+							   required="required" placeholder="Password"
+							   name="pwd" id="pwd" type="password">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-default" data-dismiss="modal">Cancle</button>
+					<button class="btn btn-danger" id="deleteMemberBtn">Delete</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
 
 <?php include 'footer.php';?>
 

@@ -119,7 +119,7 @@ class Board extends CI_Controller {
 
 		$this->db->trans_start();
 
-		$this->comment_model->delete($b_no);
+		$this->comment_model->delete_by_bno($b_no);
 
 		$file_list = $this->attachfile_model->getList($b_no);
 		$length = count($file_list);

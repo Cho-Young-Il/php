@@ -395,16 +395,7 @@ function clickBoardDetailLink(event) {
         $("#detailPostModal #postDate").html(b.reg_date);
 
         var commentList = data.comment_list;
-        var commentHTML = '<h5 style="text-align: center;">' + commentList.length + ' COMMENTS</h5>';
-        for(var i in commentList) {
-            var c = commentList[i];
-            commentHTML += '<ul class="list-unstyled list-inline media-detail pull-left" style="font-size: 12px; font-weight: bold;">'
-            commentHTML += '<li>' + c.writer + '</li>'
-            commentHTML += '<li><i class="fa fa-calendar"></i> ' + c.reg_date + '</li>'
-            commentHTML += '</ul><br>'
-            commentHTML += '<div style="font-size: 12px; font-weight: bold;">' + c.content + '</div><hr>'
-        }
-        $("#detailPostModal #commentList").html(commentHTML);
+        commentDraw(commentList);
 
         var fileHTML = "";
         var fileList = data.file_list;
@@ -565,20 +556,62 @@ $("#detailPostModal #commentAddForm").submit(function() {
         $("#detailPostModal #commentAddForm input[name=content]").val("");
 
         var commentList = data.comment_list;
-        var commentHTML = '<h5 style="text-align: center;">' + commentList.length + ' COMMENTS</h5>';
-        for(var i in commentList) {
-            var c = commentList[i];
-            commentHTML += '<ul class="list-unstyled list-inline media-detail pull-left" style="font-size: 12px; font-weight: bold;">'
-            commentHTML += '<li>' + c.writer + '</li>'
-            commentHTML += '<li><i class="fa fa-calendar"></i> ' + c.reg_date + '</li>'
-            commentHTML += '</ul><br>'
-            commentHTML += '<div style="font-size: 12px; font-weight: bold;">' + c.content + '</div><hr>'
-        }
-        $("#detailPostModal #commentList").html(commentHTML);
-
+        commentDraw(commentList);
     }, "json").fail(function(e) {
         console.log(e);
     });
-    //return false;
     return false;
 });
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+
+
+
+//////////////////////////////////////////////////////////////////////
+/////////////////////////comment delete///////////////////////////////
+//////////////////////////////////////////////////////////////////////
+function deleteComment(event) {
+    event.preventDefault();
+    $("#commentDeleteConfirm #deleteCommentNo").val($(event.target).attr("cNo"));
+    $("#commentDeleteConfirm #pwd").val("");
+}
+
+$("#commentDeleteConfirm #deleteCommentForm").submit(function() {
+    var b_no = $("#detailPostModal #bNo").val();
+    var c_no = $("#commentDeleteConfirm #deleteCommentNo").val();
+    $.post(board.contextRoot + "/comment/delete", {
+        b_no : b_no,
+        c_no : c_no,
+        pwd : $("#commentDeleteConfirm #pwd").val()
+    }, function(data) {
+        console.log(data);
+        if(!data.success) {
+            alert("Check password");
+            $("#commentDeleteConfirm #pwd").val("").focus();
+        } else {
+            var commentList = data.comment_list;
+            $("#commentDeleteConfirm button.close").trigger("click");
+            commentDraw(commentList);
+        }
+    }, "json").fail(function(e) {
+        console.log(e);
+    });
+    return false;
+});
+
+
+function commentDraw(commentList) {
+    var commentHTML = '<h5 style="text-align: center;">' + commentList.length + ' COMMENTS</h5>';
+    for(var i in commentList) {
+        var c = commentList[i];
+        commentHTML += '<ul class="list-unstyled list-inline media-detail pull-left" style="font-size: 12px; font-weight: bold;">';
+        commentHTML += '<li>' + c.writer + '</li>';
+        commentHTML += '<li><i class="fa fa-calendar"></i> ' + c.reg_date + '</li>';
+        commentHTML += '<li><a href="" cNo="' + c.c_no + '" class="text-danger comment-delete" data-toggle="modal" data-target="#commentDeleteConfirm"data-toggle="modal" data-target="#newPostModal"><i class="fa fa-fw -square-o fa-trash"></i>DELETE</a></li>';
+        commentHTML += '</ul><br>';
+        commentHTML += '<div style="font-size: 12px; font-weight: bold;">' + c.content + '</div><hr>';
+    }
+    $("#detailPostModal #commentList").html(commentHTML);
+    $("#detailPostModal a.comment-delete").click(deleteComment);
+}
