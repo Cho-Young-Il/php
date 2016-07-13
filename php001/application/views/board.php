@@ -274,9 +274,18 @@
 				</form><br><br>
 				<div class="row" style="margin-bottom: 10px;" id="commentDiv">
 					<div class="col-md-10 col-md-offset-1"><hr>
+						<h5 style="text-align: center" class="text-primary">NEW COMMENT</h5>
 						<form class="form-horizontal" id="commentAddForm" role="form">
+							<div class="input-group">
+								<input type="text" class="form-control" name="content" placeholder="Comment">
+								<span class="input-group-btn">
+									<button class="btn btn-primary" id="commentAddBtn" type="submit"
+											style="padding: 7.5px 10px; font-size: 12.5px;">
+										<span class="glyphicon glyphicon-comment"></span>
+									</button>
+								</span>
+							</div>
 							<div id="commentAddFormDiv" style="display: none;">
-								<h5 style="text-align: center" class="text-primary">NEW COMMENT</h5>
 								<div class="form-group">
 									<br>
 									<div class="col-sm-3 text-right" style="font-size: 10px;">
@@ -302,16 +311,8 @@
 									</div>
 								</div>
 							</div>
-							<div class="input-group">
-								<input type="text" class="form-control" name="comment" placeholder="Comment">
-								<span class="input-group-btn">
-									<button class="btn btn-primary" id="commentAddBtn" type="submit"
-											style="padding: 7.5px 10px; font-size: 12.5px;">
-										<span class="glyphicon glyphicon-comment"></span>
-									</button>
-								</span>
-							</div>
-						</form>
+						</form><hr>
+						<div id="commentList"></div>
 					</div><br>
 				</div><hr>
 			</div>

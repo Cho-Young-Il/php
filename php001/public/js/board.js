@@ -394,6 +394,18 @@ function clickBoardDetailLink(event) {
         $("#detailPostModal #nickName").html(b.writer);
         $("#detailPostModal #postDate").html(b.reg_date);
 
+        var commentList = data.comment_list;
+        var commentHTML = '<h5 style="text-align: center;">' + commentList.length + ' COMMENTS</h5>';
+        for(var i in commentList) {
+            var c = commentList[i];
+            commentHTML += '<ul class="list-unstyled list-inline media-detail pull-left" style="font-size: 12px; font-weight: bold;">'
+            commentHTML += '<li>' + c.writer + '</li>'
+            commentHTML += '<li><i class="fa fa-calendar"></i> ' + c.reg_date + '</li>'
+            commentHTML += '</ul><br>'
+            commentHTML += '<div style="font-size: 12px; font-weight: bold;">' + c.content + '</div><hr>'
+        }
+        $("#detailPostModal #commentList").html(commentHTML);
+
         var fileHTML = "";
         var fileList = data.file_list;
         if(fileList.length == 0) {
@@ -535,6 +547,38 @@ $("#detailPostModal #boardDetailForm #deleteBtn").click(function() {
 //////////////////////////////////////////////////////////////////////
 /////////////////////////comment register/////////////////////////////
 //////////////////////////////////////////////////////////////////////
-$("#detailPostModal input[name=comment]").focus(function() {
+$("#detailPostModal input[name=content]").focus(function() {
     $("#detailPostModal #commentAddFormDiv").fadeIn(500);
+});
+
+$("#detailPostModal #commentAddForm").submit(function() {
+    var b_no = $("#detailPostModal #bNo").val();
+    $.post(board.contextRoot + "/comment/regist", {
+        b_no : b_no,
+        writer: filterXSS($("#detailPostModal #commentAddForm #writer").val()),
+        password: filterXSS($("#detailPostModal #commentAddForm #password").val()),
+        content: filterXSS($("#detailPostModal #commentAddForm input[name=content]").val())
+    }, function(data) {
+        $("#detailPostModal #commentAddFormDiv").fadeOut(10);
+        $("#detailPostModal #commentAddForm #writer").val("");
+        $("#detailPostModal #commentAddForm #password").val("");
+        $("#detailPostModal #commentAddForm input[name=content]").val("");
+
+        var commentList = data.comment_list;
+        var commentHTML = '<h5 style="text-align: center;">' + commentList.length + ' COMMENTS</h5>';
+        for(var i in commentList) {
+            var c = commentList[i];
+            commentHTML += '<ul class="list-unstyled list-inline media-detail pull-left" style="font-size: 12px; font-weight: bold;">'
+            commentHTML += '<li>' + c.writer + '</li>'
+            commentHTML += '<li><i class="fa fa-calendar"></i> ' + c.reg_date + '</li>'
+            commentHTML += '</ul><br>'
+            commentHTML += '<div style="font-size: 12px; font-weight: bold;">' + c.content + '</div><hr>'
+        }
+        $("#detailPostModal #commentList").html(commentHTML);
+
+    }, "json").fail(function(e) {
+        console.log(e);
+    });
+    //return false;
+    return false;
 });
