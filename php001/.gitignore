@@ -20,7 +20,8 @@ user_guide
 ##libraries
 bower_components
 public/lib
-public/upload
+public/upload/*
+!public/upload/*.md
 
 ##etc
 system
