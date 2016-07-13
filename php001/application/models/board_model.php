@@ -16,7 +16,7 @@ class Board_model extends CI_Model {
 
         $SQL = "select b.b_no, b.grp, b.grp_seq, b.depth, b.title, b.writer, "
                 ."     date_format(reg_date, '%Y/%c/%e %H:%i:%s') as reg_date, "
-                ."     (select count(*) from comment where c_no = b.b_no) as comment_cnt "
+                ."     (select count(*) from comment where b_no = b.b_no) as comment_cnt "
                 ."from board b ";
         $CONDITION = "";
         if($search_type !== "anything" && $search_keyword &&

@@ -17,7 +17,7 @@ var board = {
     },
     pageable : {
         pageNo : 1,
-        size : 10,
+        size : 5,
         searchType : undefined,
         searchKeyword : undefined
     }
@@ -469,6 +469,7 @@ $("#detailPostModal #boardDetailForm #modifyBtn").click(function() {
     }, function(data) {
         if(data) {
             alert("Update Success");
+            getList();
         } else {
             alert("Update Error");
         }

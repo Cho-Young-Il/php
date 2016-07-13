@@ -1,4 +1,6 @@
 <?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+date_default_timezone_set("Asia/Seoul");
 
 class Comment extends CI_Controller{
 
