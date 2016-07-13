@@ -9,4 +9,14 @@ class attachfile_model extends CI_Model {
         $this->db->query($sql);
     }
 
+    function getList($b_no) {
+        //prevent sql injection
+
+        $SQL = "select f_no, b_no, real_name, ori_name, saved_dir "
+                ."from attachfile "
+                ."where b_no = ?";
+        $query = $this->db->query($SQL, array($b_no));
+        return $query->result_array();
+    }
+
 }

@@ -171,6 +171,154 @@
 </div>
 
 
+<!-- DETAIL POST MODAL -->
+<div class="modal fade" id="detailPostModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">×
+				</button>
+				<h1 class="modal-title text-center">
+					<i class="fa fa-fw fa-pencil"></i>POST DETAIL
+				</h1>
+			</div>
+			<div class="modal-body col-sm-10 col-sm-offset-1">
+				<form class="form-horizontal" id="boardDetailForm" role="form">
+					<input type="hidden" id="bNo">
+					<input type="hidden" id="depth">
+					<input type="hidden" id="grp">
+					<input type="hidden" id="grpSeq">
+					<div class="form-group">
+						<div class="col-sm-3 text-right" style="font-size: 12px;">
+							<label class="control-label">
+								<i class="fa fa-fw fa-lg fa-magic"></i>TITLE
+							</label>
+						</div>
+						<div class="col-sm-9">
+							<input type="text" id="editTitle" class="form-control" maxlength="50"
+								   required="required" readonly="true">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-3 text-right" style="font-size: 12px;">
+							<label class="control-label">
+								<i class="fa fa-fw fa-lg fa-align-right"></i>CONTENT
+							</label>
+						</div>
+						<div class="col-sm-9">
+                            <textarea id="editContent" class="form-control" required="required"
+									  rows="7" readonly="true"></textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-3 text-right" style="font-size: 12px;">
+							<label class="control-label">
+								<i class="fa fa-fw fa-file-image-o"></i>FILE
+							</label>
+						</div>
+						<div class="col-sm-9">
+							<div id="fileListDiv"
+								 style="border: 1px darkgray solid; border-radius: 5px; font-size: 14px;
+								  		font-weight: bold; padding: 15px;">
+							</div>
+						</div>
+					</div>
+					<div class="form-group" id="boardPwdDiv">
+						<div class="col-sm-3 text-right" style="font-size: 12px;">
+							<label class="control-label">
+								<i class="fa fa-fw fa-lg fa-lock"></i>PASSWORD
+							</label>
+						</div>
+						<div class="col-sm-9">
+							<input type="password" id="checkPWD" class="form-control" maxlength="50"
+								   required="required" placeholder="PASSWORD">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-12" style="font-size: 14px;">
+							<label class="col-sm-8 control-label">
+								<i class="fa fa-fw fa-lg fa-user"></i>NICKNAME :
+							</label>
+							<label class="col-sm-4 control-label">
+								<i class="text-left" id="nickName"></i>
+							</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-12" style="font-size: 14px;">
+							<label class="col-sm-8 control-label">
+								<i class="fa fa-fw fa-clock-o"></i>POSTED DATE :
+							</label>
+							<label class="col-sm-4 control-label">
+								<i id="postDate"></i>
+							</label>
+						</div>
+					</div><hr>
+					<div style="float:right;">
+						<button id="detailCloseBtn" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+						<button class="btn btn-success" type="button" id="editBtn">
+							<i class="fa fa-fw fa-edit"></i>EDIT
+						</button>
+						<button class="btn btn-primary" type="button" id="replyBtn" data-toggle="modal" data-target="#newPostModal">
+							<i class="fa fa-fw fa-reply"></i>REPLY
+						</button>
+						<button class="btn btn-success" type="button" id="modifyBtn" style="display: none;">
+							<i class="fa fa-fw fa-floppy-o"></i>MODIFY
+						</button>
+						<button class="btn btn-danger" type="button" id="deleteBtn"
+								style="display: none;">
+							<i class="fa fa-fw fa-trash"></i>DELETE
+						</button>
+					</div>
+				</form><br><br>
+				<div class="row" style="margin-bottom: 10px;" id="commentDiv">
+					<div class="col-md-10 col-md-offset-1"><hr>
+						<form class="form-horizontal" id="commentAddForm" role="form">
+							<div id="commentAddFormDiv" style="display: none;">
+								<h5 style="text-align: center" class="text-primary">NEW COMMENT</h5>
+								<div class="form-group">
+									<br>
+									<div class="col-sm-3 text-right" style="font-size: 10px;">
+										<label class="control-label">
+											<i class="fa fa-fw fa-lg fa-user"></i>NICKNAME
+										</label>
+									</div>
+									<div class="col-sm-9">
+										<input type="text" class="form-control" id="writer"
+											   maxlength="50" required="required" placeholder="NICKNAME">
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-3 text-right" style="font-size: 10px;">
+										<label class="control-label">
+											<i class="fa fa-fw fa-lg fa-lock"></i>PASSWORD
+										</label>
+									</div>
+									<div class="col-sm-9">
+										<input type="password" class="form-control" id="password"
+											   maxlength="50" pattern=".{4,}" title="At least 4 characters"
+											   required="required" placeholder="PASSWORD">
+									</div>
+								</div>
+							</div>
+							<div class="input-group">
+								<input type="text" class="form-control" name="comment" placeholder="Comment">
+								<span class="input-group-btn">
+									<button class="btn btn-primary" id="commentAddBtn" type="submit"
+											style="padding: 7.5px 10px; font-size: 12.5px;">
+										<span class="glyphicon glyphicon-comment"></span>
+									</button>
+								</span>
+							</div>
+						</form>
+					</div><br>
+				</div><hr>
+			</div>
+			<div class="modal-footer" style="border: 0px;"></div>
+		</div>
+	</div>
+</div>
 
 <?php include 'footer.php';?>
 

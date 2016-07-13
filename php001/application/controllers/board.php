@@ -18,10 +18,11 @@ class Board extends CI_Controller {
 
 	public function regist() {
 		//board, file regist
+		//password one way hash(bcrypt)
 		//insert transaction
 		$this->db->trans_begin();
 
-		$b_no = $this->boardRegist();	//board regist
+		$b_no = $this->boardRegist();	//board regist, password one way hash(bcrypt)
 		if(!empty($_FILES)) {			//file regist when file exist
 			if($this->fileRegist($b_no)) {
 				log_message("error", "ERROR file regist");
@@ -76,7 +77,7 @@ class Board extends CI_Controller {
 	}
 
 	private function boardRegist() {
-		//board register
+		//board register, password one way hash(bcrypt)
 		$b_no = $this->board_model->regist(array(
 			'grp'=>$_POST['grp'],
 			'grp_seq'=>$_POST['grpSeq'],
@@ -120,7 +121,7 @@ class Board extends CI_Controller {
 
 								$ori_name = str_replace(" ", "_", $_FILES['files']['name'][$key]);
 								$real_name = uniqid()."_".$ori_name;
-								$saved_dir = "/public/upload/".$date_format.$real_name;
+								$saved_dir = "public/upload/".$date_format."/".$real_name;
 
 								$dir = "public/upload/".$date_format;
 								if(!is_dir($dir)) {
@@ -128,7 +129,7 @@ class Board extends CI_Controller {
 								}
 
 								$tmp_name = $_FILES['files']['tmp_name'][$key];
-								if(move_uploaded_file($tmp_name, $dir.$real_name)) {
+								if(move_uploaded_file($tmp_name, $dir."/".$real_name)) {
 									//DB Attachfile insert with board NO
 									$this->attachfile_model->regist(array(
 										'b_no'=>$b_no,

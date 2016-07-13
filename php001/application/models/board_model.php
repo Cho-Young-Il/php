@@ -29,7 +29,7 @@ class Board_model extends CI_Model {
                     ."  or b.content like '%".$search_keyword."%' ";
         }
         $SQL .= $CONDITION;
-        $SQL .= " order by b.reg_date desc, b.grp desc, b.grp_seq asc "
+        $SQL .= " order by b.grp desc, b.grp_seq asc, b.reg_date desc "
                 ."limit ".($page_maker['start'] - 1).", ".$page_maker['howmany_per_page'];
 
         $query = $this->db->query($SQL);
@@ -41,9 +41,18 @@ class Board_model extends CI_Model {
         return $ret;
     }
 
+    function detail($b_no) {
+        $SQL = "select b.b_no, b.grp, b.grp_seq, b.depth, b.title, b.writer, b.content, "
+                ."     date_format(reg_date, '%Y/%c/%e %H:%i:%s') as reg_date "
+                ."from board b "
+                ."where b_no = ?";
+        $query = $this->db->query($SQL, array($b_no));
+        return $query->result();
+    }
+
     function update_grp($b_no) {
-        $SQL = "update board set grp = ".$b_no." where b_no = ".$b_no;
-        $this->db->query($SQL);
+        $SQL = "update board set grp = ".$b_no." where b_no = ?";
+        $this->db->query($SQL, array($b_no));
     }
 
 }

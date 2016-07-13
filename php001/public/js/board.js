@@ -9,7 +9,7 @@ $("#goTop").on("click", function() {
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 var board = {
-    contextRoot : "/~MacintoshHD/php001/index.php/board/",
+    contextRoot : "/~MacintoshHD/php001/index.php",
     ele : {
         grp : 0,
         grpSeq : 1,
@@ -29,6 +29,9 @@ var board = {
 //////////////////////////////////////////////////////////////////////
 /*board regist modal click init input tag*/
 $("#newPostBtn").click(function() {
+    board.ele.grp = 0;
+    board.ele.grpSeq = 1;
+    board.ele.depth = 0;
     $("#newPostModal input#writer").val("");
     $("#newPostModal input#password").val("");
     $("#newPostModal input#title").val("");
@@ -81,6 +84,7 @@ function chkword(obj, maxByte) {
 /* image file upload */
 $("#newPostModal #searchImage").click(function() {
     $("#newPostModal #attachFiles").trigger("click");
+
     return false;
 });
 
@@ -189,9 +193,9 @@ $("#newPostModal #boardAddForm").submit(function() {
     formData.append("password", filterXSS($("#newPostModal #boardAddForm #password").val()));
     formData.append("title", filterXSS($("#newPostModal #boardAddForm #title").val()));
     formData.append("content", filterXSS($("#newPostModal #boardAddForm #content").val()));
-    formData.append("grp", 0);
-    formData.append("grpSeq", 1);
-    formData.append("depth", 0);
+    formData.append("grp", board.ele.grp);
+    formData.append("grpSeq", board.ele.grpSeq);
+    formData.append("depth", board.ele.depth);
     formData.append("isReply", filterXSS($("#newPostModal #boardAddForm #isReply").val()));
 
     Array.prototype.sort.call(attachFiles);
@@ -199,7 +203,7 @@ $("#newPostModal #boardAddForm").submit(function() {
         formData.append("files[]", attachFiles[i]);
     }
 
-    if(uploadFile(formData, board.contextRoot + "regist")) {
+    if(uploadFile(formData, board.contextRoot + "/board/regist")) {
         alert("Success regist new post");
         $("#newPostModal button.close").trigger("click");
         getList();
@@ -226,6 +230,25 @@ function uploadFile(formData, url) {
     return isNotERR;
 }
 
+$("#detailPostModal #boardDetailForm #replyBtn").click(function() {
+    $("#detailPostModal button.close").trigger("click");
+    board.ele.depth = parseInt($("#detailPostModal #depth").val()) + 1;
+    board.ele.grp = $("#detailPostModal #grp").val();
+    board.ele.grpSeq = parseInt($("#detailPostModal #grpSeq").val()) + 1;
+
+    $("#newPostModal input#writer").val("");
+    $("#newPostModal input#password").val("");
+    $("#newPostModal input#title").val("");
+    $("#newPostModal input#attachFiles").val("");
+    $("#newPostModal textarea").val("");
+    $("#newPostModal #attachFiles").val("");
+    $("#newPostModal #attachFileThumbDiv").html("");
+    $("#newPostModal #cntMsg").html("200 remaining");
+    attachFiles = [];
+    attachFileIndex = 0;
+    attachFileCnt = 0;
+});
+
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
@@ -237,8 +260,7 @@ function uploadFile(formData, url) {
 /////////////////////////////////list/////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 function getList() {
-    $.getJSON(board.contextRoot + "getList?" + $.param(board.pageable), function(data) {
-        console.log(data);
+    $.getJSON(board.contextRoot + "/board/getList?" + $.param(board.pageable), function(data) {
         var boardHTML = "";
         var boardList = data.board_list;
         for(var i in boardList) {
@@ -330,6 +352,71 @@ function changePage(event) {
     event.preventDefault();
     board.pageable.pageNo = $(event.target).attr("pageNo");
     getList();
+}
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////
+///////////////////////////////detail/////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+function clickBoardDetailLink(event) {
+    event.preventDefault();
+
+    $("#detailPostModal #boardDetailForm #editTitle").attr("readonly", true);
+    $("#detailPostModal #boardDetailForm #editContent").attr("readonly", true);
+    $("#detailPostModal #commentAddFormDiv").fadeOut(10);
+    $("#detailPostModal #commentAddFormDiv #writer").val("");
+    $("#detailPostModal #commentAddFormDiv #password").val("");
+    $("#detailPostModal #boardDetailForm #checkPWD").val("");
+    $("#detailPostModal input[name=comment]").val("");
+    $("#detailPostModal #commentDiv").css({"display":"block"});
+    $("#detailPostModal #boardDetailForm .download").css({"display":"none"});
+    $("#detailPostModal #boardDetailForm .deletefile").css({"display":"inline"});
+    $("#detailPostModal #boardDetailForm #boardPwdDiv").css({"display":"block"});
+    $("#detailPostModal #boardDetailForm #editBtn").css({"display": "inline"});
+    $("#detailPostModal #boardDetailForm #replyBtn").css({"display": "inline"});
+    $("#detailPostModal #boardDetailForm #modifyBtn").css({"display": "none"});
+    $("#detailPostModal #boardDetailForm #deleteBtn").css({"display": "none"});
+
+    $.getJSON(board.contextRoot + "/board/detail?b_no=" + $(event.target).attr("boardNo"), function(data) {
+        var b = data.board[0];
+        $("#detailPostModal #bNo").val(b.b_no);
+        $("#detailPostModal #depth").val(b.depth);
+        $("#detailPostModal #grp").val(b.grp);
+        $("#detailPostModal #grpSeq").val(b.grp_seq);
+        $("#detailPostModal #editTitle").val(b.title);
+        $("#detailPostModal #editContent").val(b.content);
+        $("#detailPostModal #nickName").html(b.writer);
+        $("#detailPostModal #postDate").html(b.reg_date);
+
+        var fileHTML = "";
+        var fileList = data.file_list;
+        if(fileList.length == 0) {
+            fileHTML = "NONE Attached files";
+        }
+        for(var i in fileList) {
+            var f = fileList[i];
+
+            var downURI = board.contextRoot + "/filedownloader/down?ori_name="
+                        + f.ori_name + "&saved_dir=" + f.saved_dir;
+            fileHTML += '<div style="font-size: 15px;width:180px; word-wrap: break-word; margin-bottom: 5px; margin-bottom: 5px;">'
+            fileHTML += '<a style="width:180px; text-decoration: none; cursor: default;">' + f.ori_name + '</a>'
+            fileHTML += '<a href="' + downURI + '" type="button" class="btn btn-success download" style="text-align:right;padding: 2px 10px; font-size: 12px; position: absolute; right: 30px;"><i class="fa fa-fw fa-download"></i>DOWN</a>'
+            fileHTML += '<a type="button" class="btn btn-danger deletefile" data-toggle="modal" data-target="#fileDeleteConfirm" fileNo="' + f.f_no + '" savedDir="' + f.saved_dir + '" style="text-align:right;padding: 2px 10px; font-size: 12px; position: absolute; right: 30px; display: none;"><i class="fa fa-fw fa-trash"></i>DELETE</a>'
+            fileHTML += '</div>'
+        }
+
+        $("#detailPostModal #fileListDiv").html(fileHTML);
+        $("a.deletefile").click(deletefile);
+
+    }).fail(function(e) {
+        console.log(e);
+    });
 }
 
 //////////////////////////////////////////////////////////////////////
