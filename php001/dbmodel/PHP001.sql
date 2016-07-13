@@ -56,10 +56,12 @@ ALTER TABLE `BOARD`
 
 -- 게시글
 CREATE TABLE `COMMENT` (
-	`C_NO`     INTEGER   NOT NULL COMMENT '댓글일련번호', -- 댓글일련번호
-	`B_NO`     INTEGER   NOT NULL COMMENT '게시글일련번호', -- 게시글일련번호
-	`CONTENT`  TEXT      NOT NULL COMMENT '내용', -- 내용
-	`REG_DATE` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '등록일' -- 등록일
+	`C_NO`     INTEGER      NOT NULL COMMENT '댓글일련번호', -- 댓글일련번호
+	`B_NO`     INTEGER      NOT NULL COMMENT '게시글일련번호', -- 게시글일련번호
+	`WRITER`   VARCHAR(255) NOT NULL COMMENT '작성자', -- 작성자
+	`PASSWORD` VARCHAR(255) NOT NULL COMMENT '암호', -- 암호
+	`CONTENT`  TEXT         NOT NULL COMMENT '내용', -- 내용
+	`REG_DATE` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '등록일' -- 등록일
 )
 COMMENT '게시글';
 
