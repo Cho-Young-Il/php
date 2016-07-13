@@ -76,6 +76,82 @@ class Board extends CI_Controller {
 		echo json_encode($json);
 	}
 
+	public function detail() {
+		//get board detail(board, comment list, file list)
+
+		$board = $this->board_model->detail($_GET['b_no']);
+		$comment_list = $this->comment_model->getList($_GET['b_no']);
+		$file_list = $this->attachfile_model->getList($_GET['b_no']);
+
+		$json['board'] = $board;
+		$json['comment_list'] = $comment_list;
+		$json['file_list'] = $file_list;
+
+		echo json_encode($json);
+	}
+
+	public function update() {
+		$update = $this->board_model->update(array(
+			'b_no'=>$_POST['b_no'],
+			'title'=>$_POST['title'],
+			'content'=>$_POST['content']
+		));
+		if($update) echo true;
+		else echo false;
+	}
+
+	public function delete_file() {
+		//attachfile db delete with f_no
+		$delete_file = $this->attachfile_model->delete_file($_POST['f_no']);
+		if($delete_file) { //file delete if exist
+			$saved_dir = $_POST['saved_dir'];
+			if(file_exists($saved_dir)) {
+				unlink($saved_dir);
+			}
+			echo true;
+		} else {
+			echo false;
+		}
+	}
+
+	public function delete() {
+		$b_no = $_POST['b_no'];
+
+		$this->db->trans_start();
+
+		$this->comment_model->delete($b_no);
+
+		$file_list = $this->attachfile_model->getList($b_no);
+		$length = count($file_list);
+		for($i = 0; $i < $length; $i++) {
+			$saved_dir = $file_list[$i]['saved_dir'];
+			if(file_exists($saved_dir)) {
+				unlink($saved_dir);
+			}
+		}
+
+		$this->attachfile_model->delete($b_no);
+		$this->board_model->delete($b_no);
+
+		$this->db->trans_complete();
+
+		if ($this->db->trans_status() === FALSE) {
+			echo false;
+		} else {
+			echo true;
+		}
+	}
+
+	public function check_pwd() {
+		//compare hash with password
+		$hash = $this->board_model->get_board_pwd($_POST['b_no']);
+		if(password_verify($_POST['pwd'], $hash)) {
+			echo true;
+		} else {
+			echo false;
+		}
+	}
+
 	private function boardRegist() {
 		//board register, password one way hash(bcrypt)
 		$b_no = $this->board_model->regist(array(

@@ -50,9 +50,24 @@ class Board_model extends CI_Model {
         return $query->result();
     }
 
+    function update($update) {
+        $SQL = "update board set title = ?, content = ? where b_no = ?";
+        return $this->db->query($SQL, array($update['title'], $update['content'], $update['b_no']));
+    }
+
+    function delete($b_no) {
+        $SQL = "delete from board where b_no = ?";
+        $this->db->query($SQL, array($b_no));
+    }
+
     function update_grp($b_no) {
         $SQL = "update board set grp = ".$b_no." where b_no = ?";
         $this->db->query($SQL, array($b_no));
+    }
+
+    function get_board_pwd($b_no) {
+        $SQL = "select password from board where b_no = ?";
+        return $this->db->query($SQL, array($b_no))->row()->password;
     }
 
 }

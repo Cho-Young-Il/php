@@ -13,4 +13,9 @@ class comment_model extends CI_Model{
         return $query->result();
     }
 
+    function delete($b_no) {
+        $SQL = "delete from comment where b_no = ?";
+        $this->db->query($SQL, array($b_no));
+    }
+
 }

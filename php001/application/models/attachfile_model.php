@@ -19,4 +19,14 @@ class attachfile_model extends CI_Model {
         return $query->result_array();
     }
 
+    function delete($b_no) {
+        $SQL = "delete from attachfile where b_no = ?";
+        return $this->db->query($SQL, array($b_no));
+    }
+
+    function delete_file($f_no) {
+        $SQL = "delete from attachfile where f_no = ?";
+        return $this->db->query($SQL, array($f_no));
+    }
+
 }

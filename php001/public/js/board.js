@@ -421,3 +421,120 @@ function clickBoardDetailLink(event) {
 
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////
+///////////////////////////////update/////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+$("#detailPostModal #boardDetailForm #editBtn").click(function() {
+    $.post(board.contextRoot + "/board/check_pwd", {
+        b_no : $("#detailPostModal #bNo").val(),
+        pwd : filterXSS($("#detailPostModal #boardPwdDiv #checkPWD").val())
+    }, function(data) {
+        if(!data) {
+            alert("Check password");
+            var pwd = $("#detailPostModal #boardPwdDiv #checkPWD");
+            pwd.val("");
+            pwd.focus();
+        } else {
+            $("#detailPostModal #boardDetailForm #editTitle").attr("readonly", false);
+            $("#detailPostModal #boardDetailForm #editContent").attr("readonly", false);
+            $("#detailPostModal #boardDetailForm #checkPWD").val("");
+            $("#detailPostModal #commentDiv").css({"display":"none"});
+            $("#detailPostModal #boardDetailForm .download").css({"display":"none"});
+            $("#detailPostModal #boardDetailForm .deletefile").css({"display":"inline"});
+            $("#detailPostModal #boardDetailForm #boardPwdDiv").css({"display":"none"});
+            $("#detailPostModal #boardDetailForm #editBtn").css({"display": "none"});
+            $("#detailPostModal #boardDetailForm #replyBtn").css({"display": "none"});
+            $("#detailPostModal #boardDetailForm #modifyBtn").css({"display": "inline"});
+            $("#detailPostModal #boardDetailForm #deleteBtn").css({"display": "inline"});
+        }
+    }).fail(function(e) {
+        console.log(e);
+    });
+});
+
+$("#detailPostModal #boardDetailForm #modifyBtn").click(function() {
+    var b_no = $("#detailPostModal #bNo").val();
+    $.post(board.contextRoot + "/board/update", {
+        b_no : b_no,
+        title : filterXSS($("#detailPostModal #editTitle").val()),
+        content : filterXSS($("#detailPostModal #editContent").val())
+    }, function(data) {
+        if(data) {
+            alert("Update Success");
+        } else {
+            alert("Update Error");
+        }
+        $("#detailPostModal button.close").trigger("click");
+    }).fail(function(e) {
+        console.log(e);
+    });
+});
+
+function deletefile(event) {
+    event.preventDefault();
+    $("#fileDeleteConfirm #deleteFileForm #deleteFileNo").val($(event.target).attr("fileNo"));
+    $("#fileDeleteConfirm #deleteFileForm #savedDir").val($(event.target).attr("savedDir"));
+}
+
+$("#fileDeleteConfirm #deleteFileForm #deleteFileBtn").click(function() {
+    var f_no = $("#fileDeleteConfirm #deleteFileForm #deleteFileNo").val();
+    var saved_dir = $("#fileDeleteConfirm #deleteFileForm #savedDir").val();
+    $.post(board.contextRoot + "/board/delete_file", {
+        f_no : f_no,
+        saved_dir : saved_dir
+    }, function(data) {
+        $("#fileDeleteConfirm button.close").trigger("click");
+        if(data) {
+            alert("Delete file success");
+        } else {
+            alert("Error delete file");
+        }
+        $("#detailPostModal button.close").trigger("click");
+    }).fail(function(e) {
+        console.log(e);
+    });
+    return false;
+});
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////
+///////////////////////////////delete/////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+$("#detailPostModal #boardDetailForm #deleteBtn").click(function() {
+    var b_no = $("#detailPostModal #bNo").val();
+    $.post(board.contextRoot + "/board/delete", {
+        b_no : b_no
+    }, function(data) {
+        if(data) {
+            alert("Board Delete Success");
+            getList();
+        } else {
+            alert("Error Delete Board");
+        }
+        $("#detailPostModal button.close").trigger("click");
+    }).fail(function(e) {
+        console.log(e);
+    });
+    return false;
+});
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+
+
+
+//////////////////////////////////////////////////////////////////////
+/////////////////////////comment register/////////////////////////////
+//////////////////////////////////////////////////////////////////////
+$("#detailPostModal input[name=comment]").focus(function() {
+    $("#detailPostModal #commentAddFormDiv").fadeIn(500);
+});

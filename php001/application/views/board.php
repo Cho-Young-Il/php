@@ -320,6 +320,31 @@
 	</div>
 </div>
 
+<!-- FILE DELETE CONFIRM -->
+<div class="modal fade" id="fileDeleteConfirm">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">×</button>
+				<h4 class="modal-title text-danger">Delete File</h4>
+			</div>
+			<form id="deleteFileForm" role="form">
+				<input type="hidden" id="deleteFileNo">
+				<input type="hidden" id="savedDir">
+				<div class="modal-body">
+					<h5>Delete this file?</h5>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-default" data-dismiss="modal">Cancle</button>
+					<button class="btn btn-danger" id="deleteFileBtn"><i class="fa fa-fw fa-trash"></i>Delete</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
 <?php include 'footer.php';?>
 
 <script src="/public/lib/jquery/jquery.min.js"></script>
